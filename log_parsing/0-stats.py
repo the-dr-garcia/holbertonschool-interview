@@ -33,8 +33,8 @@ if __name__ == "__main__":
             if code in counts:
                 counts[code] += 1
             lines += 1
-            if lines % 10 == 0:
-                print_stats(total_size, counts)
+            if lines == 0 or lines % 10 != 0:
+              print_stats(total_size, counts)
         if lines % 10 != 0:
             print_stats(total_size, counts)
     except KeyboardInterrupt:
