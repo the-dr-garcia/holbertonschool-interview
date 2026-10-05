@@ -1,9 +1,7 @@
 #!/usr/bin/python3
 """Reads stdin line by line and computes log metrics."""
-import re
 import sys
 
-PATTERN = re.compile(r'"GET /projects/260 HTTP/1\.1" (\d+) (\d+)')
 CODES = [200, 301, 400, 401, 403, 404, 405, 500]
 
 
@@ -22,11 +20,14 @@ if __name__ == "__main__":
 
     try:
         for line in sys.stdin:
-            match = PATTERN.search(line)
-            if match is None:
+            sys.stderr.write("RAW: {!r}\n".format(line))
+            parts = line.split()
+            try:
+                code = int(parts[-2])
+                size = int(parts[-1])
+            except (IndexError, ValueError):
                 continue
-            code = int(match.group(1))
-            total_size += int(match.group(2))
+            total_size += size
             if code in counts:
                 counts[code] += 1
             lines += 1
